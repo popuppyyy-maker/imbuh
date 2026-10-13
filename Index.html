@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IMBUH</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f1e7;--ink:#1d2330;--mut:#6b6f78;--card:#fffdf8;--line:#e2d9c6;--cell:#ece4d3;--red:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--ink:#ece8dd;--mut:#9aa0ab;--card:#1f2430;--line:#2e3442;--cell:#1a1e27;--red:#e0584f}}
+:root[data-theme="dark"]{--bg:#ffffff;--ink:#ece8dd;--mut:#000000;--card:#1f2430;--line:#2e3442;--cell:#1a1e27;--red:#e0584f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-user-select:none;user-select:none}
+.wrap{max-width:440px;margin:0 auto;padding:18px 16px 40px}
+h1{font-family:'Newsreader',Georgia,serif;font-size:34px;letter-spacing:.14em;margin:0;line-height:1}
+h1 span{color:var(--red)}
+.sub{color:var(--mut);font-size:13px;margin:6px 0 14px}
+.stats{display:flex;gap:8px;margin-bottom:12px}
+.st{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 10px}
+.st small{display:block;color:var(--mut);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.st b{font-family:'Newsreader',Georgia,serif;font-size:21px}
+.bar{height:4px;background:var(--cell);border-radius:4px;margin-bottom:12px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .4s}
+#board{position:relative;width:100%;aspect-ratio:1;background:var(--cell);border-radius:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px;touch-action:none;border:1px solid var(--line)}
+#board .c{background:var(--bg);border-radius:12px;opacity:.55}
+#tl{position:absolute;inset:0;pointer-events:none}
+.t{position:absolute;left:0;top:0;display:grid;place-items:center;border-radius:12px;font-family:'Newsreader',Georgia,serif;font-weight:700;transition:transform .16s ease,opacity .22s,scale .22s;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.t.r{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.t.a{background:var(--red);color:#fff8f0;font-style:italic}
+.t.new{animation:pop .24s}
+.t.hint{animation:pulse .6s 3;z-index:2}
+@keyframes pop{from{scale:.5;opacity:0}to{scale:1;opacity:1}}
+@keyframes pulse{50%{scale:1.1}}
+.fl{position:absolute;left:0;top:0;font-family:'Newsreader',Georgia,serif;font-weight:700;font-size:20px;color:var(--red);animation:rise 1s forwards;white-space:nowrap;z-index:3;text-shadow:0 0 6px var(--bg)}
+@keyframes rise{to{margin-top:-46px;opacity:0}}
+.shake{animation:sh .2s}
+@keyframes sh{25%{translate:-4px 0}75%{translate:4px 0}}
+#card{margin-top:12px;min-height:84px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+#card .w{font-family:'Newsreader',Georgia,serif;font-size:24px;font-weight:700}
+#card .f{font-size:12px;color:var(--red);font-weight:700;margin-left:8px}
+#card p{margin:4px 0 0;font-size:13.5px;line-height:1.4}
+#card .n{color:var(--mut);font-size:12.5px;font-style:italic}
+.btns{display:flex;gap:8px;margin:12px 0}
+button{flex:1;font:inherit;font-weight:500;font-size:14px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+h2{font-family:'Newsreader',Georgia,serif;font-size:18px;margin:18px 0 8px}
+#kamus{display:flex;flex-wrap:wrap;gap:6px}
+#kamus span{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:4px 11px;font-size:13px}
+#kamus em{color:var(--mut);font-size:13px}
+#ov{position:fixed;inset:0;background:rgba(10,12,18,.55);display:none;place-items:center;padding:20px;z-index:10}
+#ov.on{display:grid}
+#ov div{background:var(--card);border:1px solid var(--line);border-radius:18px;max-width:380px;padding:22px;color:var(--ink)}
+#ov h3{font-family:'Newsreader',Georgia,serif;font-size:24px;margin:0 0 8px}
+#ov p,#ov li{font-size:14px;line-height:1.5;margin:0 0 8px}
+#ov ol{padding-left:18px;margin:0 0 10px}
+.chip{display:inline-block;padding:0 7px;border-radius:6px;font-size:12px;font-weight:700}
+.chip.r{border:1px solid var(--line)}.chip.a{background:var(--red);color:#fff8f0}
+</style></head><body>
+<div class="wrap">
+<h1>IMB<span>U</span>H</h1>
+<div class="sub">Pertemukan akar kata dengan imbuhan yang tepat. Lahirkan kata baru.</div>
+<div class="stats"><div class="st"><small>Skor</small><b id="sc">0</b></div><div class="st"><small>Terbaik</small><b id="bs">0</b></div><div class="st"><small>Kamus</small><b id="kc">0/15</b></div></div>
+<div class="bar"><i id="pb"></i></div>
+<div id="board"></div>
+<div id="card"><div class="w">Geser papan</div><p>Gunakan jari atau tombol panah. Kartu putih bertemu kartu merah yang cocok, lalu jadi satu kata.</p></div>
+<div class="btns"><button id="hb">Petunjuk</button><button id="rb">Ulang</button><button id="ib">Cara main</button></div>
+<h2>Kamusmu</h2><div id="kamus"><em>Belum ada kata. Mulai menggeser.</em></div>
+</div>
+<div id="ov"><div id="ovb"></div></div>
+<script>
+const AF={meN:'meN-',peN:'peN-',di:'di-',ter:'ter-',ber:'ber-',an:'-an'};
+const D={
+tulis:{meN:['menulis','membuat huruf atau kata dengan pena','Huruf /t/ luluh: meN- + tulis → menulis'],peN:['penulis','orang yang menulis'],di:['ditulis','dikerjakan oleh orang lain (pasif)'],ter:['tertulis','sudah ada dalam bentuk tulisan'],an:['tulisan','hasil menulis']},
+sapu:{meN:['menyapu','membersihkan dengan sapu','Huruf /s/ luluh dan muncul ny: meN- + sapu → menyapu'],peN:['penyapu','orang atau alat yang menyapu'],di:['disapu','dibersihkan dengan sapu']},
+baca:{meN:['membaca','memahami isi tulisan','meN- menjadi mem- di depan huruf b'],peN:['pembaca','orang yang membaca'],di:['dibaca','dipahami isinya'],ter:['terbaca','dapat dibaca'],an:['bacaan','sesuatu yang dibaca']},
+pukul:{meN:['memukul','mengenai dengan benda keras','Huruf /p/ luluh: meN- + pukul → memukul'],peN:['pemukul','alat atau orang yang memukul'],di:['dipukul','dikenai pukulan'],an:['pukulan','hasil atau cara memukul']},
+tanam:{meN:['menanam','menaruh bibit di tanah','Huruf /t/ luluh: meN- + tanam → menanam'],peN:['penanam','orang yang menanam'],di:['ditanam','ditaruh di tanah'],an:['tanaman','tumbuhan yang ditanam']},
+ajar:{meN:['mengajar','memberi pelajaran','meN- menjadi meng- di depan huruf vokal'],peN:['pengajar','orang yang mengajar'],ber:['belajar','berusaha memperoleh ilmu','Kasus khusus: ber- + ajar → belajar'],di:['diajar','diberi pelajaran'],an:['ajaran','hal yang diajarkan']},
+kirim:{meN:['mengirim','menyampaikan ke tempat lain','Huruf /k/ luluh: meN- + kirim → mengirim'],peN:['pengirim','orang yang mengirim'],di:['dikirim','disampaikan ke tempat lain'],an:['kiriman','barang yang dikirim']},
+beli:{meN:['membeli','memperoleh dengan uang','meN- menjadi mem- di depan huruf b'],peN:['pembeli','orang yang membeli'],di:['dibeli','diperoleh dengan uang'],ter:['terbeli','sanggup dibeli']},
+main:{ber:['bermain','melakukan permainan'],peN:['pemain','orang yang bermain','peN- menjadi pe- di depan huruf m'],an:['mainan','benda untuk bermain']},
+kerja:{ber:['bekerja','melakukan pekerjaan','Kasus khusus: ber- + kerja → bekerja'],peN:['pekerja','orang yang bekerja','peN- menjadi pe- di depan huruf k? tidak: /k/ luluh jadi peng-, tetapi kerja mengikuti pola khusus']},
+lihat:{meN:['melihat','memakai mata untuk tahu','meN- menjadi me- di depan huruf l'],di:['dilihat','diamati orang lain'],ter:['terlihat','dapat dilihat']}
+};
+D.kerja.peN[2]='Pola khusus: peN- + kerja → pekerja';
+const R=Object.keys(D),A=Object.keys(AF),GOAL=15;
+const $=s=>document.querySelector(s),board=$('#board');
+let G,score,best=0,words,tid=0,over,won,S,els={};
+try{best=+localStorage.getItem('imbuh-best')||0}catch(e){}
+for(let i=0;i<16;i++){const c=document.createElement('div');c.className='c';board.appendChild(c)}
+const tl=document.createElement('div');tl.id='tl';board.appendChild(tl);
+const pick=a=>a[Math.random()*a.length|0];
+const pair=(a,b)=>{if(a.t==b.t)return null;const r=a.t=='r'?a:b,f=a.t=='a'?a:b,e=D[r.v][f.v];return e?{word:e[0],mean:e[1],note:e[2]||'',root:r.v,af:f.v}:null};
+function mk(t,v){return{id:++tid,t,v}}
+function spawn(){
+  const em=[];G.forEach((t,i)=>{if(!t)em.push(i)});if(!em.length)return;
+  const tiles=G.filter(Boolean),roots=tiles.filter(t=>t.t=='r').map(t=>t.v);
+  let t;
+  if(Math.random()<.55){t=mk('r',pick(R))}
+  else{const c=A.filter(a=>roots.some(r=>D[r][a]));t=mk('a',c.length&&Math.random()<.75?pick(c):pick(A))}
+  G[pick(em)]=t;
+}
+function init(){
+  G=Array(16).fill(null);score=0;words=[];over=false;won=false;
+  for(const k in els){els[k].remove()}els={};
+  for(let i=0;i<6;i++)spawn();
+  $('#card').innerHTML='<div class="w">Geser papan</div><p>Gunakan jari atau tombol panah. Kartu putih bertemu kartu merah yang cocok, lalu jadi satu kata.</p>';
+  render();ui();
+}
+function place(el,i){const x=8+(i%4)*(S+8),y=8+((i/4)|0)*(S+8);el.style.transform=`translate(${x}px,${y}px)`;el.style.width=el.style.height=S+'px';el.style.fontSize=S*.26+'px'}
+function render(){
+  S=(board.clientWidth-40)/4;const alive=new Set();
+  G.forEach((t,i)=>{if(!t)return;alive.add(t.id);let el=els[t.id];
+    if(!el){el=document.createElement('div');el.className='t '+(t.t=='r'?'r':'a')+' new';el.textContent=t.t=='r'?t.v:AF[t.v];tl.appendChild(el);els[t.id]=el}
+    place(el,i)});
+  for(const k in els)if(!alive.has(+k)){const e=els[k];e.style.opacity=0;e.style.scale=.6;setTimeout(()=>e.remove(),260);delete els[k]}
+}
+function ui(){
+  $('#sc').textContent=score;$('#bs').textContent=best;
+  const n=words.length;$('#kc').textContent=n+'/'+GOAL;$('#pb').style.width=Math.min(100,n/GOAL*100)+'%';
+  const k=$('#kamus');k.innerHTML=n?'':'<em>Belum ada kata. Mulai menggeser.</em>';
+  words.forEach(w=>{const s=document.createElement('span');s.textContent=w.word;s.title=w.mean;k.appendChild(s)});
+}
+function gain(m){
+  score+=10;if(!words.some(w=>w.word==m.word))words.push(m);
+  $('#card').innerHTML=`<div><span class="w">${m.word}</span><span class="f">${AF[m.af]} + ${m.root}</span></div><p>${m.mean}.</p>${m.note?`<p class="n">${m.note}</p>`:''}`;
+  const f=document.createElement('div');f.className='fl';f.textContent='+ '+m.word;
+  const x=8+(m.at%4)*(S+8),y=8+((m.at/4)|0)*(S+8);f.style.transform=`translate(${x}px,${y+S/3}px)`;f.style.left='0';tl.appendChild(f);setTimeout(()=>f.remove(),1000);
+}
+function move(d){
+  if(over||$('#ov').classList.contains('on'))return;
+  const old=G.slice(),ng=Array(16).fill(null),mg=[];
+  for(let l=0;l<4;l++){
+    const idx=[0,1,2,3].map(k=>d==0?l*4+k:d==1?l*4+3-k:d==2?k*4+l:(3-k)*4+l);
+    const ts=idx.map(i=>G[i]).filter(Boolean),out=[];
+    for(let i=0;i<ts.length;i++){const p=ts[i+1]&&pair(ts[i],ts[i+1]);if(p){p.at=idx[out.length];mg.push(p);i++}else out.push(ts[i])}
+    out.forEach((t,k)=>ng[idx[k]]=t);
+  }
+  const moved=mg.length||ng.some((t,i)=>(t&&t.id)!==(old[i]&&old[i].id));
+  if(!moved){board.classList.remove('shake');void board.offsetWidth;board.classList.add('shake');return}
+  G=ng;mg.forEach(gain);spawn();render();
+  if(score>best){best=score;try{localStorage.setItem('imbuh-best',best)}catch(e){}}
+  ui();
+  if(!won&&words.length>=GOAL){won=true;setTimeout(()=>ov(`<h3>Kamusmu terisi</h3><p>${GOAL} kata baru sudah kamu lahirkan. Itulah cara imbuhan bekerja: satu akar bisa tumbuh jadi banyak kata.</p><p>Skor: ${score}</p><button class="p" onclick="cl()">Lanjut bermain</button>`),500)}
+  else if(!can()){over=true;setTimeout(()=>ov(`<h3>Papan penuh</h3><p>Kamu mengumpulkan ${words.length} kata dengan skor ${score}.</p><button class="p" onclick="cl();init()">Main lagi</button>`),500)}
+}
+function can(){
+  if(G.some(t=>!t))return true;
+  for(let i=0;i<16;i++){if(i%4<3&&pair(G[i],G[i+1]))return true;if(i<12&&pair(G[i],G[i+4]))return true}
+  return false;
+}
+function hint(){
+  const ps=[];G.forEach((a,i)=>G.forEach((b,j)=>{if(a&&b&&a.t=='r'&&b.t=='a'&&D[a.v][b.v])ps.push([a,b])}));
+  if(!ps.length){$('#card').innerHTML='<div class="w">Belum ada pasangan</div><p>Tidak ada pasangan yang cocok di papan. Geser untuk memunculkan kartu baru.</p>';return}
+  const [a,b]=pick(ps);[a,b].forEach(t=>{const e=els[t.id];e.classList.add('hint');setTimeout(()=>e.classList.remove('hint'),1900)});
+}
+function ov(h){$('#ovb').innerHTML=h;$('#ov').classList.add('on')}
+function cl(){$('#ov').classList.remove('on')}
+function help(){ov(`<h3>Cara main</h3><ol><li>Geser papan. Semua kartu meluncur ke satu arah.</li><li>Kartu <span class="chip r">akar kata</span> yang bertemu <span class="chip a">imbuhan</span> yang tepat akan melebur menjadi kata baru dan masuk Kamus.</li><li>Pasangan keliru tidak bergabung. Jangan biarkan papan penuh.</li></ol><p>Perhatikan perubahan bunyi: <i>meN- + tulis</i> menjadi <i>menulis</i>, bukan <i>mentulis</i>. Kumpulkan ${GOAL} kata.</p><button class="p" onclick="cl()">Mulai</button>`)}
+addEventListener('keydown',e=>{const m={ArrowLeft:0,ArrowRight:1,ArrowUp:2,ArrowDown:3,a:0,d:1,w:2,s:3}[e.key];if(m!=null){e.preventDefault();move(m)}});
+let sx,sy;
+board.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY});
+board.addEventListener('pointerup',e=>{if(sx==null)return;const dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;move(Math.abs(dx)>Math.abs(dy)?(dx<0?0:1):(dy<0?2:3))});
+addEventListener('resize',render);
+$('#hb').onclick=hint;$('#rb').onclick=init;$('#ib').onclick=help;
+init();help();
+</script></body></html>
